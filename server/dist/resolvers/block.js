@@ -30,8 +30,26 @@ BlockInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], BlockInput);
 let BlockResolver = class BlockResolver {
-    async blocks() {
-        return Block_1.Block.find({});
+    async blocks(date) {
+        if (!date) {
+            return Block_1.Block.find({});
+        }
+        console.log(date);
+        const replacements = [date];
+        const blocks = await (0, typeorm_1.getConnection)().query(`
+      select b.*
+      from block b
+      where b."startDateTime" < $1
+      `, replacements);
+        return blocks;
+    }
+    async unassignedBlocks() {
+        const blocks = await (0, typeorm_1.getConnection)().query(`
+      select b.*
+      from block b
+      where b."startDateTime" is null or b."endDateTime" is null
+      `);
+        return blocks;
     }
     async createBlock(input) {
         return Block_1.Block.create(Object.assign(Object.assign({}, input), { inboxId: 1 })).save();
@@ -41,8 +59,8 @@ let BlockResolver = class BlockResolver {
             .createQueryBuilder()
             .update(Block_1.Block)
             .set({ startDateTime, endDateTime })
-            .where('id = :id ', {
-            id
+            .where("id = :id ", {
+            id,
         })
             .returning("*")
             .execute();
@@ -55,10 +73,17 @@ let BlockResolver = class BlockResolver {
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [Block_1.Block]),
+    __param(0, (0, type_graphql_1.Arg)("date", () => String, { nullable: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BlockResolver.prototype, "blocks", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Block_1.Block]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], BlockResolver.prototype, "blocks", null);
+], BlockResolver.prototype, "unassignedBlocks", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Block_1.Block),
     __param(0, (0, type_graphql_1.Arg)("input")),
@@ -68,7 +93,7 @@ __decorate([
 ], BlockResolver.prototype, "createBlock", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Block_1.Block),
-    __param(0, (0, type_graphql_1.Arg)('id', () => type_graphql_1.Int)),
+    __param(0, (0, type_graphql_1.Arg)("id", () => type_graphql_1.Int)),
     __param(1, (0, type_graphql_1.Arg)("startDateTime")),
     __param(2, (0, type_graphql_1.Arg)("endDateTime")),
     __metadata("design:type", Function),
