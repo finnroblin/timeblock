@@ -16,6 +16,8 @@ const Inbox_1 = require("./entities/Inbox");
 const Schedule_1 = require("./entities/Schedule");
 const inbox_1 = require("./resolvers/inbox");
 const schedule_1 = require("./resolvers/schedule");
+const User_1 = require("./entities/User");
+const user_1 = require("./resolvers/user");
 const main = async () => {
     const _conn = await (0, typeorm_1.createConnection)({
         type: "postgres",
@@ -25,12 +27,12 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
-        entities: [Block_1.Block, Inbox_1.Inbox, Schedule_1.Schedule]
+        entities: [Block_1.Block, Inbox_1.Inbox, Schedule_1.Schedule, User_1.User]
     });
     const app = (0, express_1.default)();
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [hello_1.HelloResolver, block_1.BlockResolver, schedule_1.ScheduleResolver, inbox_1.InboxResolver],
+            resolvers: [hello_1.HelloResolver, block_1.BlockResolver, schedule_1.ScheduleResolver, inbox_1.InboxResolver, user_1.UserResolver],
             validate: false,
         }),
         context: ({ res }) => ({

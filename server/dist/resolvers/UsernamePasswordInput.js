@@ -9,34 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Inbox = void 0;
+exports.UsernamePasswordInput = void 0;
 const type_graphql_1 = require("type-graphql");
-const typeorm_1 = require("typeorm");
-const Block_1 = require("./Block");
-const User_1 = require("./User");
-let Inbox = class Inbox extends typeorm_1.BaseEntity {
+let UsernamePasswordInput = class UsernamePasswordInput {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Inbox.prototype, "id", void 0);
+    __metadata("design:type", String)
+], UsernamePasswordInput.prototype, "email", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ default: "MAIN INBOX" }),
     __metadata("design:type", String)
-], Inbox.prototype, "title", void 0);
+], UsernamePasswordInput.prototype, "username", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => Block_1.Block, block => block.inbox),
-    __metadata("design:type", Array)
-], Inbox.prototype, "blocks", void 0);
-__decorate([
-    (0, typeorm_1.OneToOne)(() => User_1.User, user => user.inbox),
-    __metadata("design:type", User_1.User)
-], Inbox.prototype, "user", void 0);
-Inbox = __decorate([
-    (0, type_graphql_1.ObjectType)(),
-    (0, typeorm_1.Entity)()
-], Inbox);
-exports.Inbox = Inbox;
-//# sourceMappingURL=Inbox.js.map
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], UsernamePasswordInput.prototype, "password", void 0);
+UsernamePasswordInput = __decorate([
+    (0, type_graphql_1.InputType)()
+], UsernamePasswordInput);
+exports.UsernamePasswordInput = UsernamePasswordInput;
+//# sourceMappingURL=UsernamePasswordInput.js.map

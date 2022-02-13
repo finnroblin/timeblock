@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { Inbox } from "./Inbox";
 import { Schedule } from "./Schedule";
+import { User } from "./User";
 // import { ScalarDateTypeDefinition } from 'graphql-scalars'
 
 // import { User } from "./User";
@@ -53,8 +54,8 @@ export class Block extends BaseEntity {
   // @Column()
   // creatorId: number;
 
-  // @ManyToOne(() => User, user => user.blocks)
-  // user: User;
+  @ManyToOne(() => User, user => user.blocks)
+  user: User;
 
   @Field()
   @Column({ nullable: true })
@@ -66,6 +67,10 @@ export class Block extends BaseEntity {
   @Field()
   @Column({ nullable: true })
   scheduleId: number;
+
+  @Field()
+  @Column({nullable: true})
+  isComplete: boolean;
 
   @ManyToOne(() => Schedule, (schedule) => schedule.blocks)
   schedule: Schedule;

@@ -12,6 +12,8 @@ import { Inbox } from "./entities/Inbox";
 import { Schedule } from "./entities/Schedule";
 import { InboxResolver } from "./resolvers/inbox";
 import { ScheduleResolver } from "./resolvers/schedule";
+import { User } from "./entities/User";
+import { UserResolver } from "./resolvers/user";
 const main = async() => {
     const _conn = await createConnection({
         type: "postgres",
@@ -21,14 +23,14 @@ const main = async() => {
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [Block, Inbox, Schedule]
+        entities: [Block, Inbox, Schedule, User]
     });
     // await Block.delete({});
     const app = express();
         
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloResolver, BlockResolver, ScheduleResolver, InboxResolver],
+            resolvers: [HelloResolver, BlockResolver, ScheduleResolver, InboxResolver, UserResolver],
             validate: false,
         }),
         context: ({  res }) => ({

@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Block } from "./Block";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -18,5 +19,8 @@ export class Inbox extends BaseEntity {
     
     @OneToMany(() => Block, block => block.inbox )
     blocks: Block[];
+
+    @OneToOne(() => User, user => user.inbox)
+    user: User;
 
 }

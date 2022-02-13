@@ -14,6 +14,7 @@ const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Inbox_1 = require("./Inbox");
 const Schedule_1 = require("./Schedule");
+const User_1 = require("./User");
 let Block = class Block extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -54,6 +55,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Block.prototype, "endDateTime", void 0);
 __decorate([
+    (0, typeorm_1.ManyToOne)(() => User_1.User, user => user.blocks),
+    __metadata("design:type", User_1.User)
+], Block.prototype, "user", void 0);
+__decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Number)
@@ -67,6 +72,11 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Number)
 ], Block.prototype, "scheduleId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Block.prototype, "isComplete", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => Schedule_1.Schedule, (schedule) => schedule.blocks),
     __metadata("design:type", Schedule_1.Schedule)
