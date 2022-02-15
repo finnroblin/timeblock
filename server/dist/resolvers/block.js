@@ -52,7 +52,7 @@ let BlockResolver = class BlockResolver {
         return blocks;
     }
     async createBlock(input) {
-        return Block_1.Block.create(Object.assign(Object.assign({}, input), { inboxId: 1 })).save();
+        return Block_1.Block.create(Object.assign(Object.assign({}, input), { inboxId: 1, isComplete: false })).save();
     }
     async updateBlockTimes(id, startDateTime, endDateTime) {
         const result = await (0, typeorm_1.getConnection)()

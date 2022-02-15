@@ -73,7 +73,7 @@ export class BlockResolver {
     // if Block's start date time and end date time are null,
     // then insert them into the inbox.
 
-    return Block.create({ ...input, inboxId: 1 }).save();
+    return Block.create({ ...input, inboxId: 1, isComplete: false }).save();
   }
 
   // updates the startTime and endTime of the block
