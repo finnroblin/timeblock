@@ -1,0 +1,9 @@
+query UnassignedBlocks {
+  unassignedBlocks {
+    title
+    description
+    id
+    createdAt
+    startDateTime
+  }
+}

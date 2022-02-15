@@ -1,0 +1,13 @@
+mutation CreateBlock( $input: BlockInput!)
+{
+  createBlock(input: $input) {
+     title
+     description
+     id
+     inboxId
+     
+    createdAt
+
+    
+  }
+}

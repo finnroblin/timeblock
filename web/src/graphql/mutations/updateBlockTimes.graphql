@@ -1,0 +1,10 @@
+mutation updateBlockTimes($id: Int!, $startDateTime: DateTime!, $endDateTime: DateTime!) {
+  updateBlockTimes(id: $id, startDateTime: $startDateTime, endDateTime: $endDateTime) {
+    id
+    title
+    description
+    createdAt
+    startDateTime
+    endDateTime
+  }
+}

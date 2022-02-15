@@ -1,0 +1,8 @@
+query Blocks($date: String) {
+  blocks(date: $date) {
+    title
+    description
+    id
+    startDateTime
+  }
+}
