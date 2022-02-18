@@ -1,9 +1,10 @@
 import { User } from "../entities/User";
-import { Arg, Field, Mutation, ObjectType, Resolver } from "type-graphql";
+import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import argon2 from "argon2";
 import { getConnection } from "typeorm";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
+import { MyContext } from "../types";
 
 @ObjectType()
 class FieldError {
@@ -27,6 +28,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
+    @Ctx() {  req }: MyContext
     
   ): Promise<UserResponse> {
     const errors = validateRegister(options);
@@ -68,7 +70,7 @@ export class UserResolver {
     // store user id session
     // this will set a cookie on the user
     // keep them logged in
-    // req.session.userId = user.id;
+    req.session.userId = user.id;
 
     return { user };
   }
@@ -112,4 +114,15 @@ export class UserResolver {
       user,
     };
   }
+  @Query(() => User, { nullable: true })
+    me(
+        @Ctx() { req }: MyContext
+    ) {
+        if (!req.session.userId) {
+            return null;
+        }
+
+        return User.findOne( req.session.userId );
+        
+    }
 }

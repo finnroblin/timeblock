@@ -86,6 +86,7 @@ export type Query = {
   block?: Maybe<Block>;
   blocks: Array<Block>;
   hello: Scalars['String'];
+  me?: Maybe<User>;
   unassignedBlocks: Array<Block>;
 };
 
@@ -125,12 +126,33 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
 };
 
+export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
+
+export type RegularUserFragment = { __typename?: 'User', id: number, username: string };
+
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, username: string } | null };
+
 export type CreateBlockMutationVariables = Exact<{
   input: BlockInput;
 }>;
 
 
 export type CreateBlockMutation = { __typename?: 'Mutation', createBlock: { __typename?: 'Block', title: string, description?: string | null, id: number, inboxId: number, createdAt: any } };
+
+export type LoginMutationVariables = Exact<{
+  usernameOrEmail: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, username: string } | null } };
+
+export type RegisterMutationVariables = Exact<{
+  options: UsernamePasswordInput;
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, username: string } | null } };
 
 export type UpdateBlockTimesMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -148,12 +170,39 @@ export type BlocksQueryVariables = Exact<{
 
 export type BlocksQuery = { __typename?: 'Query', blocks: Array<{ __typename?: 'Block', title: string, description?: string | null, id: number, startDateTime?: any | null }> };
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string } | null };
+
 export type UnassignedBlocksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UnassignedBlocksQuery = { __typename?: 'Query', unassignedBlocks: Array<{ __typename?: 'Block', title: string, description?: string | null, id: number, createdAt: any, startDateTime?: any | null }> };
 
-
+export const RegularErrorFragmentDoc = gql`
+    fragment RegularError on FieldError {
+  field
+  message
+}
+    `;
+export const RegularUserFragmentDoc = gql`
+    fragment RegularUser on User {
+  id
+  username
+}
+    `;
+export const RegularUserResponseFragmentDoc = gql`
+    fragment RegularUserResponse on UserResponse {
+  errors {
+    ...RegularError
+  }
+  user {
+    ...RegularUser
+  }
+}
+    ${RegularErrorFragmentDoc}
+${RegularUserFragmentDoc}`;
 export const CreateBlockDocument = gql`
     mutation CreateBlock($input: BlockInput!) {
   createBlock(input: $input) {
@@ -168,6 +217,28 @@ export const CreateBlockDocument = gql`
 
 export function useCreateBlockMutation() {
   return Urql.useMutation<CreateBlockMutation, CreateBlockMutationVariables>(CreateBlockDocument);
+};
+export const LoginDocument = gql`
+    mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(usernameOrEmail: $usernameOrEmail, password: $password) {
+    ...RegularUserResponse
+  }
+}
+    ${RegularUserResponseFragmentDoc}`;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const RegisterDocument = gql`
+    mutation Register($options: UsernamePasswordInput!) {
+  register(options: $options) {
+    ...RegularUserResponse
+  }
+}
+    ${RegularUserResponseFragmentDoc}`;
+
+export function useRegisterMutation() {
+  return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
 export const UpdateBlockTimesDocument = gql`
     mutation updateBlockTimes($id: Int!, $startDateTime: DateTime!, $endDateTime: DateTime!) {
@@ -202,6 +273,17 @@ export const BlocksDocument = gql`
 
 export function useBlocksQuery(options?: Omit<Urql.UseQueryArgs<BlocksQueryVariables>, 'query'>) {
   return Urql.useQuery<BlocksQuery>({ query: BlocksDocument, ...options });
+};
+export const MeDocument = gql`
+    query Me {
+  me {
+    ...RegularUser
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
+  return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const UnassignedBlocksDocument = gql`
     query UnassignedBlocks {
