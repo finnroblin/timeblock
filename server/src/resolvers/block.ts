@@ -11,6 +11,8 @@ import {
   Resolver,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { getBeginningOfDay} from "../utils/getBeginningOfDay";
+import {getEndOfDay } from "../utils/getEndOfDay";
 
 @InputType()
 class BlockInput {
@@ -35,19 +37,33 @@ export class BlockResolver {
   async blocks(
     @Arg("date", () => String, { nullable: true }) date: string | null
   ): Promise<Block[]> {
+
     if (!date) {
+      console.log("NO DATE SENT!!!!!");
       return Block.find({});
     }
+    console.log(" date from resolver:");
     console.log(date);
+    // beginning of dayL 
+    
+    const beginningOfDay = getBeginningOfDay(date);
+    const endOfDay = getEndOfDay(date);
     // const replacements: any[] = [new Date(parseInt(date))];
-    const replacements: any[] = [date];
-
-
+    const replacements: any[] = [beginningOfDay, endOfDay];
+    console.log(replacements);
+    // want to query with the date range:
+    /*  
+        x < EOD(date)
+        and x > EOD(date-1)
+        we have several variables to work with:
+        - startDateTime
+        - endDateTime
+    */ 
     const blocks = await getConnection().query(
       `
       select b.*
       from block b
-      where b."startDateTime" < $1
+      where b."startDateTime" > $1 and b."startDateTime" < $2
       `,
       replacements
     );
@@ -95,6 +111,30 @@ export class BlockResolver {
     console.log("result: ", result);
     return result.raw[0];
   }
+
+  @Mutation(() => Block)
+  async setBlock(
+    @Arg("id", () => Int) id: number,
+    @Arg("input") input: BlockInput,
+    @Arg("startDateTime") startDateTime: Date,
+    @Arg("endDateTime") endDateTime: Date
+  ): Promise<Block | null> {
+    const title = input.title;
+    const description = input.description;
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(Block)
+      .set({ startDateTime, endDateTime, title, description })
+      .where("id = :id ", {
+        id,
+      })
+      .returning("*")
+      .execute();
+    console.log("result: ", result);
+    return result.raw[0];
+  }
+
+
 
   @Query(() => Block, { nullable: true })
   block(@Arg("id", () => Int) id: number): Promise<Block | undefined> {

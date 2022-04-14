@@ -5,7 +5,7 @@ import { getConnection } from "typeorm";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
 import { MyContext } from "../types";
-
+import { COOKIE_NAME} from "../constants";
 @ObjectType()
 class FieldError {
   @Field()
@@ -79,7 +79,7 @@ export class UserResolver {
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
-    // @Ctx() { req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(
       usernameOrEmail.includes("@")
@@ -107,8 +107,8 @@ export class UserResolver {
         ],
       };
     }
-
-    // req.session.userId = user.id;
+    console.log("USERID:", user.id);
+    req.session.userId = user.id;
 
     return {
       user,
@@ -124,5 +124,23 @@ export class UserResolver {
 
         return User.findOne( req.session.userId );
         
+    }
+
+    @Mutation(() => Boolean) 
+    logout(
+        @Ctx() {req, res }: MyContext 
+    ) {
+        return new Promise((resolve) => 
+        req.session.destroy((err) => {
+            res.clearCookie(COOKIE_NAME);
+            if (err) {
+                console.log(err);
+                resolve(false);
+                return;
+            }
+
+            resolve(true);
+        })
+        );
     }
 }

@@ -62,21 +62,30 @@ export const Schedule: React.FC<ScheduleProps> = ({ date }) => {
   // const [result, reexecuteQuery] = useQuery({
   //     query: blocksQuery,
   //   });
-
+  console.log("The current date is: ");
+  console.log(date.toISOString());
   const [result, reexecuteQuery] = useBlocksQuery({
     variables: { date: date.toISOString() },
   });
   console.log("result finished");
+  // console.log(date);
+  // console.log(date.getDate());
   // const hours = [...Array(24).keys()];
-  const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20,21,22,23];
+  const hours = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23,
+  ];
 
   const { data, fetching, error } = result;
+
+console.log(data);
+
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
   return (
     <Box borderWidth="3px" borderRadius="lg">
       <Center bg="tomato" h="100px" color="white">
-        Schedule for {numericalMonthToWord(date.getUTCMonth())} {date.getDay()}
+        Schedule for {numericalMonthToWord(date.getUTCMonth())} {date.getDate()}
       </Center>
       <Stack direction={["row", "column"]} w="full" aria-orientation="vertical">
         {/* <div>
@@ -87,28 +96,28 @@ export const Schedule: React.FC<ScheduleProps> = ({ date }) => {
           })}
         </div> */}
 
-        
-        
-
-            {hours.map((hour) => (
-              <div> 
-                <ScheduleBlock hour={hour} block={data.blocks.find( (b => parseInt(getHourFromDateString(b.startDateTime)) === hour))} />
-</div>
-          
+        {hours.map((hour) => (
+          // const block_data = data.blocks.find( (b => parseInt(getHourFromDateString(b.startDateTime)) === hour) );
+          //   const block_data = data.blocks.find( (b => parseInt(getHourFromDateString(b.startDateTime)) === hour) );
+          //   const block_data = data.blocks.find( (b => parseInt(getHourFromDateString(b.startDateTime)) === hour) );
+          // {
+          //   const block_data = data.blocks.find( (b => parseInt(getHourFromDateString(b.startDateTime)) === hour) );
+          // }
+          <div>
+            <ScheduleBlock
+              hour={hour}
+              block={data.blocks.find(
+                (b) => parseInt(getHourFromDateString(b.startDateTime)) === hour
+              )}
+            />
+          </div>
 
           //  data.blocks.find(
           //   (hour === data.blocks.find((B) => parseInt(getHourFromDateString(B.startDateTime)) ) ) => (
           //       <div>{parseInt(getHourFromDateString(Block.startDateTime)) === hour}</div>
           //   )
-            ))}
-            
-          
-          
-         
-          // console.log(hour)
-        
+        ))}
       </Stack>
-      
     </Box>
   );
 };

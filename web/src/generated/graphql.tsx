@@ -54,7 +54,9 @@ export type Mutation = {
   createInbox: Inbox;
   createSchedule: Schedule;
   login: UserResponse;
+  logout: Scalars['Boolean'];
   register: UserResponse;
+  setBlock: Block;
   updateBlockTimes: Block;
 };
 
@@ -72,6 +74,14 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   options: UsernamePasswordInput;
+};
+
+
+export type MutationSetBlockArgs = {
+  endDateTime: Scalars['DateTime'];
+  id: Scalars['Int'];
+  input: BlockInput;
+  startDateTime: Scalars['DateTime'];
 };
 
 
@@ -147,12 +157,27 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, username: string } | null } };
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
+
 export type RegisterMutationVariables = Exact<{
   options: UsernamePasswordInput;
 }>;
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, username: string } | null } };
+
+export type SetBlockMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: BlockInput;
+  startDateTime: Scalars['DateTime'];
+  endDateTime: Scalars['DateTime'];
+}>;
+
+
+export type SetBlockMutation = { __typename?: 'Mutation', setBlock: { __typename?: 'Block', title: string, description?: string | null, id: number, inboxId: number, startDateTime?: any | null, endDateTime?: any | null } };
 
 export type UpdateBlockTimesMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -229,6 +254,15 @@ export const LoginDocument = gql`
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
 };
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
+
+export function useLogoutMutation() {
+  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
+};
 export const RegisterDocument = gql`
     mutation Register($options: UsernamePasswordInput!) {
   register(options: $options) {
@@ -239,6 +273,27 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const SetBlockDocument = gql`
+    mutation SetBlock($id: Int!, $input: BlockInput!, $startDateTime: DateTime!, $endDateTime: DateTime!) {
+  setBlock(
+    id: $id
+    input: $input
+    startDateTime: $startDateTime
+    endDateTime: $endDateTime
+  ) {
+    title
+    description
+    id
+    inboxId
+    startDateTime
+    endDateTime
+  }
+}
+    `;
+
+export function useSetBlockMutation() {
+  return Urql.useMutation<SetBlockMutation, SetBlockMutationVariables>(SetBlockDocument);
 };
 export const UpdateBlockTimesDocument = gql`
     mutation updateBlockTimes($id: Int!, $startDateTime: DateTime!, $endDateTime: DateTime!) {

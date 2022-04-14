@@ -1,0 +1,20 @@
+mutation SetBlock(
+  $id: Int!
+  $input: BlockInput!
+  $startDateTime: DateTime!
+  $endDateTime: DateTime!
+) {
+  setBlock(
+    id: $id
+    input: $input
+    startDateTime: $startDateTime
+    endDateTime: $endDateTime
+  ) {
+    title
+    description
+    id
+    inboxId
+    startDateTime
+    endDateTime
+  }
+}

@@ -16,6 +16,8 @@ exports.BlockResolver = void 0;
 const Block_1 = require("../entities/Block");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+const getBeginningOfDay_1 = require("../utils/getBeginningOfDay");
+const getEndOfDay_1 = require("../utils/getEndOfDay");
 let BlockInput = class BlockInput {
 };
 __decorate([
@@ -32,14 +34,19 @@ BlockInput = __decorate([
 let BlockResolver = class BlockResolver {
     async blocks(date) {
         if (!date) {
+            console.log("NO DATE SENT!!!!!");
             return Block_1.Block.find({});
         }
+        console.log(" date from resolver:");
         console.log(date);
-        const replacements = [date];
+        const beginningOfDay = (0, getBeginningOfDay_1.getBeginningOfDay)(date);
+        const endOfDay = (0, getEndOfDay_1.getEndOfDay)(date);
+        const replacements = [beginningOfDay, endOfDay];
+        console.log(replacements);
         const blocks = await (0, typeorm_1.getConnection)().query(`
       select b.*
       from block b
-      where b."startDateTime" < $1
+      where b."startDateTime" > $1 and b."startDateTime" < $2
       `, replacements);
         return blocks;
     }
@@ -59,6 +66,21 @@ let BlockResolver = class BlockResolver {
             .createQueryBuilder()
             .update(Block_1.Block)
             .set({ startDateTime, endDateTime })
+            .where("id = :id ", {
+            id,
+        })
+            .returning("*")
+            .execute();
+        console.log("result: ", result);
+        return result.raw[0];
+    }
+    async setBlock(id, input, startDateTime, endDateTime) {
+        const title = input.title;
+        const description = input.description;
+        const result = await (0, typeorm_1.getConnection)()
+            .createQueryBuilder()
+            .update(Block_1.Block)
+            .set({ startDateTime, endDateTime, title, description })
             .where("id = :id ", {
             id,
         })
@@ -101,6 +123,18 @@ __decorate([
         Date]),
     __metadata("design:returntype", Promise)
 ], BlockResolver.prototype, "updateBlockTimes", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Block_1.Block),
+    __param(0, (0, type_graphql_1.Arg)("id", () => type_graphql_1.Int)),
+    __param(1, (0, type_graphql_1.Arg)("input")),
+    __param(2, (0, type_graphql_1.Arg)("startDateTime")),
+    __param(3, (0, type_graphql_1.Arg)("endDateTime")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, BlockInput,
+        Date,
+        Date]),
+    __metadata("design:returntype", Promise)
+], BlockResolver.prototype, "setBlock", null);
 __decorate([
     (0, type_graphql_1.Query)(() => Block_1.Block, { nullable: true }),
     __param(0, (0, type_graphql_1.Arg)("id", () => type_graphql_1.Int)),
