@@ -1,0 +1,10 @@
+mutation CreateBlockWithTimes($endDateTime: DateTime!, $startDateTime: DateTime!, $input: BlockInput!) {
+  createBlockWithTimes(endDateTime: $endDateTime, startDateTime: $startDateTime, input: $input) {
+    id
+    inboxId
+    description
+    title
+    startDateTime
+    endDateTime
+  }
+}

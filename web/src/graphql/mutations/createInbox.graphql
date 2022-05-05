@@ -1,0 +1,7 @@
+mutation CreateInbox {
+    createInbox {
+        id
+        title
+        creatorId
+    }
+}

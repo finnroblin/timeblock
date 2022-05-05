@@ -1,0 +1,3 @@
+query GetRefreshToken($userId: Float!) {
+    getRefreshToken(userId: $userId) 
+}

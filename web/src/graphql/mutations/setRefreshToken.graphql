@@ -1,0 +1,4 @@
+mutation SetRefreshToken($userId: Float!, $refresh_token: String!){
+    setRefreshToken(userId: $userId, refresh_token: $refresh_token)
+    
+}

@@ -29,6 +29,7 @@ export const ScheduleBlock = (props) => {
               {props.block.title}
 
               </GridItem>
+              {/* Add icon button to expand, modal-style */}
               <GridItem backgroundColor={"gray.50"} colSpan={8} w='100%'>{props.block.description}</GridItem>
               {/* { block.startDateTime } */}
             </Grid>

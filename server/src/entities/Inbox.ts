@@ -22,5 +22,8 @@ export class Inbox extends BaseEntity {
 
     @OneToOne(() => User, user => user.inbox)
     user: User;
-
+    
+    @Field({nullable: true})
+    @Column({nullable: true})
+    creatorId?: number;
 }

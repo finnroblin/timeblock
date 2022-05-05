@@ -50,12 +50,20 @@ export class Block extends BaseEntity {
   @Column({ nullable: true })
   endDateTime?: Date ;
 
+  @Field(() => Date, {nullable: true})
+  @Column({nullable: true})
+  date?: Date;
+
   // @Field()
   // @Column()
   // creatorId: number;
 
   @ManyToOne(() => User, user => user.blocks)
   user: User;
+
+  @Field()
+  @Column({nullable: true})
+  creatorId?: number;
 
   @Field()
   @Column({ nullable: true })

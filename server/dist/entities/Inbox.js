@@ -34,6 +34,11 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => User_1.User, user => user.inbox),
     __metadata("design:type", User_1.User)
 ], Inbox.prototype, "user", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], Inbox.prototype, "creatorId", void 0);
 Inbox = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

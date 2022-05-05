@@ -55,9 +55,19 @@ __decorate([
     __metadata("design:type", Date)
 ], Block.prototype, "endDateTime", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => Date, { nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Date)
+], Block.prototype, "date", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => User_1.User, user => user.blocks),
     __metadata("design:type", User_1.User)
 ], Block.prototype, "user", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], Block.prototype, "creatorId", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({ nullable: true }),

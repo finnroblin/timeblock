@@ -8,19 +8,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InboxResolver = void 0;
 const Inbox_1 = require("../entities/Inbox");
 const type_graphql_1 = require("type-graphql");
 let InboxResolver = class InboxResolver {
-    createInbox() {
-        return Inbox_1.Inbox.create({}).save();
+    createInbox({ req }) {
+        return Inbox_1.Inbox.create({
+            creatorId: req.session.userId,
+        }).save();
     }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => Inbox_1.Inbox),
+    __param(0, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], InboxResolver.prototype, "createInbox", null);
 InboxResolver = __decorate([

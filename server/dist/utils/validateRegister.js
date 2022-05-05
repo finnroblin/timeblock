@@ -2,37 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateRegister = void 0;
 const validateRegister = (options) => {
-    if (!options.email.includes("@")) {
-        return [
-            {
+    if (!options.email.includes('@')) {
+        return [{
                 field: "email",
-                message: "invalid email",
-            },
-        ];
+                message: "invalid email"
+            }];
     }
     if (options.username.length <= 2) {
-        return [
-            {
+        return [{
                 field: "username",
-                message: "length must be greater than 2",
-            },
-        ];
+                message: "length must be greater than 2"
+            }];
     }
-    if (options.username.includes("@")) {
-        return [
-            {
+    if (options.username.includes('@')) {
+        return [{
                 field: "username",
-                message: "cannot include an @",
-            },
-        ];
+                message: "cannot include @"
+            }];
     }
-    if (options.password.length <= 2) {
-        return [
-            {
+    if (options.password.length <= 3) {
+        return [{
                 field: "password",
-                message: "length must be greater than 2",
-            },
-        ];
+                message: "length must be greater than 3"
+            }];
     }
     return null;
 };

@@ -9,8 +9,9 @@ import { Button } from '@chakra-ui/button';
 import { Box, Flex, Link } from '@chakra-ui/layout';
 import { useMutation } from 'urql';
 import { useLoginMutation } from '../generated/graphql';
-import { useRouter } from 'next/router';
 import { toErrorMap } from '../utils/toErrorMap';
+import { useRouter } from 'next/router';
+import { createUrqlClient } from '../utils/createUrqlClient';
 import { withUrqlClient } from 'next-urql';
 import NextLink from 'next/link';
 
@@ -27,7 +28,7 @@ const Login: React.FC<loginProps> = ({}) => {
        onSubmit ={async (values, { setErrors }) => {
            const response = await login(values);
            console.log(response)
-
+            console.log("logged in!!")
             if (response.data?.login.errors) {
                 
                 setErrors(
@@ -80,5 +81,5 @@ const Login: React.FC<loginProps> = ({}) => {
    );
 };
 
-export default Login; 
+export default withUrqlClient(createUrqlClient)(Login); 
 

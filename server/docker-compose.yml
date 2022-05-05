@@ -1,7 +1,7 @@
 services:
   redis:
     image: redis
-    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+    command: ["redis-server", "--bind", "redis", "--port", "7777"]
   pg_db:
     container_name: "pg_db"
     image: postgres
@@ -9,6 +9,7 @@ services:
       - "8000:8000"
     environment:
       DB_HOST: host.docker.internal
+
       POSTGRES_DB: rclone2
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test
