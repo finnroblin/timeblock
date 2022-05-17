@@ -12,14 +12,17 @@ COPY yarn.lock ./
 RUN yarn
 
 COPY . .
+COPY wait-for-it.sh .
+
 # COPY .env.production .env
+
+ARG REDIS_HOST
+ARG POSTGRES_HOST
 
 RUN yarn build
 
 
-
 ENV NODE_ENV production
-
 
 EXPOSE 8080
 
