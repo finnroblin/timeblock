@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 FROM node:16
 
@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn
+# RUN yarn
 
 COPY . .
 COPY wait-for-it.sh .
@@ -19,7 +19,9 @@ COPY wait-for-it.sh .
 ARG REDIS_HOST
 ARG POSTGRES_HOST
 
-RUN yarn build
+# RUN yarn build
+# RUN tsc
+# CMD ["tsc"]
 
 
 ENV NODE_ENV production

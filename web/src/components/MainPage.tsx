@@ -5,6 +5,7 @@ import { Grid, GridItem, Container } from "@chakra-ui/react";
 import { Inbox } from "./Inbox";
 import { NewInbox } from "./NewInbox";
 import { Schedule } from "./Schedule";
+import axios from "axios";
 
 interface MainPageProps {
     date: Date;
@@ -12,6 +13,12 @@ interface MainPageProps {
 
 export const MainPage: React.FC<MainPageProps> = ({ date }) => {
     const [toUpdateAssignedBlocks, setToUpdateAssignedBlocks] = useState(false);
+    console.log("checking api");
+    axios.post('http://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/api/')
+      .then((resp) => {
+        console.log("In the main page, posting to api")
+        console.log("api resp: ", resp)
+      })
   return (
     <>
       <NewInbox date={date} />

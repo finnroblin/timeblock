@@ -1,0 +1,68 @@
+version: "3"
+services:
+  redis:
+    image: redis
+    # command: ["redis-server", "--bind", "redis", "--port", "7777"]
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-1
+        awslogs-group: ecs-log
+    networks:
+      - webnet
+  pg_db:
+    container_name: "pg_db"
+    image: postgres
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-1
+        awslogs-group: ecs-log
+    
+    ports:
+      - "8000:8000"
+    networks:
+      - webnet
+    environment:
+      POSTGRES_DB: timeblock_prod
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    command: -p 8000
+  api:
+    container_name: api
+    image: finnroblin/beanstalk-timeblock:latest
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-1
+        awslogs-group: ecs-log
+    depends_on:
+      - pg_db
+      - redis
+    ports:
+      - 4000:4000
+    environment:
+      DB_HOST: pg_db
+      REDIS_HOST: redis
+    networks:
+      - webnet
+    command: ["./wait-for-it.sh", "pg_db:8000", "--", "node", "dist/index.js"]
+
+volumes:
+  dbdata:
+    driver: local
+      
+    external: true
+    driver_opts:
+      # Filesystem configuration
+      backup_policy: ENABLED
+      lifecycle_policy: AFTER_14_DAYS
+      performance_mode: maxIO
+      throughput_mode: provisioned
+      provisioned_throughput: 1
+
+
+networks:
+  webnet:

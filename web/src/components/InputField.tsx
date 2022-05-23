@@ -1,36 +1,73 @@
-import { FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/form-control';
-import { Input } from '@chakra-ui/input';
-import { Textarea } from '@chakra-ui/react';
-import { useField } from 'formik';
-import React, { InputHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes } from "react";
+import { useField } from "formik";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  Textarea,
+} from "@chakra-ui/react";
 
-type InputFieldProps =  InputHTMLAttributes<HTMLInputElement> & {
-    label: string;
-    
-    name: string;
-    textarea?: boolean
+type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+  name: string;
+  textarea?: boolean;
 };
 
+// '' => false
+// 'error message stuff' => true
+
 export const InputField: React.FC<InputFieldProps> = ({
-    label,
-    textarea,
-    size: _,
-    ...props}) => {
-        let InputOrTextarea = Input;
-        if (textarea) {
-            InputOrTextarea = Textarea;
-        }
-    const [field, {error}] = useField(props);
+  label,
+  textarea,
+  size: _,
+  ...props
+}) => {
+  let InputOrTextarea = textarea ? Input : Textarea;
 
-        return (
-             // not an empty string 
-        <FormControl isInvalid={!!error}>
+  if (textarea) {
+    const [field, { error }] = useField(props);
 
-                <FormLabel htmlFor={field.name}>{label}</FormLabel>
-                <InputOrTextarea {...field}
-                {...props}
-                id={field.name} placeholder={props.placeholder} />
-                {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
-              </FormControl>
-              );
-}
+    // let handleChange = (e) => {
+    //   console.log(e);
+    // };
+
+    return (
+      <FormControl isInvalid={!!error}>
+        <FormLabel htmlFor={field.name}>{label}</FormLabel>
+        <Textarea
+          // {...props}
+          {...field}
+          //   {...props}
+          //   onChange={handleChange}
+          //   value={field.value}
+          id={field.name}
+        />
+        {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
+      </FormControl>
+    );
+  } else {
+    const [field, { error }] = useField(props);
+
+    let handleChange = (e) => {
+      console.log(e);
+    };
+
+    return (
+      <FormControl isInvalid={!!error}>
+        <FormLabel htmlFor={field.name}>{label}</FormLabel>
+        <Input
+          {...field}
+          {...props}
+          // onChange={handleChange}
+          id={field.name}
+        />
+        {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
+      </FormControl>
+    );
+  }
+
+  //   if (textarea) {
+  //     InputOrTextarea = Textarea;
+  //   }
+};

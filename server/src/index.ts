@@ -35,27 +35,27 @@ const main = async () => {
   let retries = 5;
   while (retries) {
     try {
-        const conn = await createConnection();
-    //   const conn = await createConnection({
-    //     type: "postgres",
-    //     // database: 'rclone2',
-    //     // username: 'postgres',
-    //     // password: 'test',
-    //     // url: process.env.DATABASE_URL,
-    //     // url: "postgresql://postgres:test@localhost:8000/rclone2",
-    //     url: process.env.DB_HOST,
+      // const conn = await createConnection();
+      const conn = await createConnection({
+        type: "postgres",
+        // database: 'rclone2',
+        //     // username: 'postgres',
+        //     // password: 'test',
+        //     // url: process.env.DATABASE_URL,
+        //     // url: "postgresql://postgres:test@localhost:8000/rclone2",
+        url: process.env.DB_HOST,
 
-    //     logging: true,
-    //     synchronize: true,
-    //     migrations: [path.join(__dirname, "./migrations/*")],
-    //     entities: [Block, Inbox, Schedule, User],
-    //   });
-      await conn.runMigrations();
-
+        //     logging: true,
+        //     synchronize: true,
+        //     migrations: [path.join(__dirname, "./migrations/*")],
+        //     entities: [Block, Inbox, Schedule, User],
+      });
+      // await conn.runMigrations();
+      console.log(process.env.DB_HOST, process.env.REDIS_HOST);
       break;
     } catch (err) {
       console.log("ERROR: ", err);
-      console.log(process.env.DB_HOST,process.env.REDIS_HOST)
+      console.log(process.env.DB_HOST, process.env.REDIS_HOST);
       retries -= 1;
       console.log("RETRIES LEFT: ", retries);
       await new Promise((res) => setTimeout(res, 3000));
@@ -69,77 +69,108 @@ const main = async () => {
   let RedisStore = require("connect-redis")(session);
   // const redisClient = redis.createClient();
   // const redisPassword = "password";
-  const redis = new Redis(
-    //     {host: 'host.docker.internal',
-    //     port:6379,
-    //     password: 'T'
-    // }
-    // process.env.REDIS_URL
-    process.env.REDIS_HOST
+  retries = 5;
+  while (retries > 0) {
+    try {
+      const redis = new Redis(
+        //     {host: 'host.docker.internal',
+        //     port:6379,
+        //     password: 'T'
+        // }
+        // process.env.REDIS_URL
+        process.env.REDIS_HOST
 
-    // "127.0.0.1:6379"
-    // "127.0.0.1:7777"
+        // "127.0.0.1:6379"
+        // "127.0.0.1:7777"
 
-    // "0.0.0.0:6379"
-  );
+        // "0.0.0.0:6379"
+      );
 
-  // redis.auth(password: 'password' () => ());
-  app.set("trust proxy", 1);
-  app.use(
-    cors({
-      // origin: "*",
-      // origin: process.env.CORS_ORIGIN,
-      origin: "http://localhost:3000",
-      // origin: "http://localhost:4000/graphql",
-      // origin: 'https://studio.apollographql.com',
-      credentials: true,
-      // access-control-allow-origin: "https://studio.apollographql.com",
-      // access-control-allow-credentials: true,
-    })
-  );
+      // redis.auth(password: 'password' () => ());
+      app.set("trust proxy", 1);
+      app.use(
+        cors({
+          // origin: "*",
+          // origin: process.env.CORS_ORIGIN,
+          origin: "http://localhost:3000",
+          // origin: "http://localhost:4000/graphql",
+          // origin: 'https://studio.apollographql.com',
+          credentials: true,
+          // access-control-allow-origin: "https://studio.apollographql.com",
+          // access-control-allow-credentials: true,
+        })
+      );
 
-  app.use(
-    session({
-      name: COOKIE_NAME,
-      store: new RedisStore({
-        // client: redisClient,
-        client: redis,
-        disableTouch: true,
-      }),
-      cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
-        httpOnly: true, // can't access cookie from javascript frontend
-        sameSite: "lax", // csrf something (good to google)
-        secure: __prod__, // if secure then cookie only works in https (localhost is not https)
-        // domain: __prod__ ? ".customdomain.com" : undefined, // replace with my custom domain
-      },
-      saveUninitialized: false,
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-    })
-  );
+      app.use(
+        session({
+          name: COOKIE_NAME,
+          store: new RedisStore({
+            // client: redisClient,
+            client: redis,
+            disableTouch: true,
+          }),
+          cookie: {
+            maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+            httpOnly: true, // can't access cookie from javascript frontend
+            sameSite: "lax", // csrf something (good to google)
+            // secure: __prod__, // if secure then cookie only works in https (localhost is not https)
+            secure: false
+            // domain: __prod__ ? ".customdomain.com" : undefined, // replace with my custom domain
+          },
+          saveUninitialized: false,
+          secret: process.env.SESSION_SECRET,
+          resave: false,
+        })
+      );
 
-  const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [UserResolver, BlockResolver, InboxResolver, ScheduleResolver],
-      validate: false,
-    }),
-    context: ({ req, res }) => ({ req, res, redis }), // is assessible by all resolvers
-  });
-  await apolloServer.start();
-  apolloServer.applyMiddleware({
-    app,
-    cors: false,
-  });
+      const apolloServer = new ApolloServer({
+        schema: await buildSchema({
+          resolvers: [
+            UserResolver,
+            BlockResolver,
+            InboxResolver,
+            ScheduleResolver,
+          ],
+          validate: false,
+        }),
+        context: ({ req, res }) => ({ req, res, redis }), // is assessible by all resolvers
+      });
+
+      await apolloServer.start();
+      apolloServer.applyMiddleware({
+        app,
+        cors: false,
+      });
+      console.log("OUR REDIS OBJECT: ")
+      console.log(redis)
+
+      break;
+    } catch (err) {
+      console.log("redis error, retries remaining: ", retries);
+      console.log(err);
+      console.log("REDIS HOST: ", process.env.REDIS_HOST);
+      retries -= 1;
+      await new Promise((res) => setTimeout(res, 3000));
+    }
+  }
   app.use(express.json());
   app.use("/api", require("./routes/api.route"));
 
   app.listen(
     // parseInt(process.env.PORT)
-    4000,
+    // 4000,
+    8080,
     () => {
       // set listener on
-      console.log("server started on localhost:4000");
+      console.log(
+        "server started on port 8080, redis env: ",
+        process.env.REDIS_HOST,
+        " postgres env: ",
+        process.env.DB_HOST
+      );
+      console.log("11:12 build")
+
+      
     }
   );
 };

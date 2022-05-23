@@ -11,8 +11,7 @@ import {
   MeDocument,
   LoginMutation,
   RegisterMutation,
-  VoteMutationVariables,
-  DeletePostMutationVariables,
+  
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { pipe, tap } from "wonka";
@@ -86,7 +85,8 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
     cookie = ctx?.req?.headers?.cookie;
   }
   return {
-    url: "http://localhost:4000/graphql",
+    // url: "http://localhost:4000/graphql",
+    url: "http://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/graphql",
     fetchOptions: {
       credentials: "include" as const,
       headers: cookie

@@ -1,0 +1,14 @@
+version: 1
+task_definition:
+  services:
+    redis:
+      cpu_shares: 100
+      mem_limit: 524288000
+    pg_db:
+      cpu_shares: 100
+      mem_limit: 524288000
+
+    api:
+      cpu_shares: 100
+      mem_limit: 524288000
+  

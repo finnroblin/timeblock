@@ -168,6 +168,7 @@ const [refresh_token] = useGetRefreshTokenQuery({
   // // user is logged in
   else {
     return (
+      <>
       <Flex zIndex={1} position="sticky" top={0} bg="blue.100" p={4}>
         <Flex>
           <Heading color="green.500" margin="auto" maxW={800}>
@@ -211,20 +212,31 @@ const [refresh_token] = useGetRefreshTokenQuery({
           <Text>
             Welcome, {data.me.username}
           </Text>
-          <div>  
+          <>  
             { refresh_token.data ? 
-          (<Text>
-            Synced with Google {refresh_token.data}
+          (
+            <Button>
+              placeholder
+            </Button>
+          //   <Flex>  
+          
+          // <Text color='green'>
+          //   Synced with Google {refresh_token.data}
 
-          </Text>) : (<Button>
+          // </Text>
+          // </Flex>  
+          
+          ) :
+           (<Button>
             <NextLink href="/gsetup">
               <Link>
                 Sync with Google Calendar 
               </Link>
             </NextLink>
-          </Button>)
-  }
-          </div>
+          </Button>
+          )
+            }
+          </>
 
           <Button color="black.500" onClick={() => {
             logout();
@@ -237,6 +249,7 @@ const [refresh_token] = useGetRefreshTokenQuery({
           {/* </Box> */}
         </Box>
       </Flex>
+      </>
     );
   }
 };

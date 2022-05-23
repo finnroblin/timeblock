@@ -7,87 +7,6 @@ import { withUrqlClient } from 'next-urql';
 // import { UpdootSection } from "../components/UpdootSection";
 // import { useDeletePostMutation, useMeQuery, usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-
-// const Index = () =>  {
-//     const [variables, setVariables] = useState({
-//         limit: 15,
-//         // cursor: null as null | string });
-//         cursor: null });
-//     const [{ data: meData }] = useMeQuery();
-//     const [{data, error, fetching }] = usePostsQuery({
-//         variables
-//     });
-//     const [,deletePost] = useDeletePostMutation();
-
-//     if (!fetching && !data) {
-//         return <div>
-//             <div>you got query failed for some reason</div>
-//             <div> {error?.message} </div>
-//             </div>
-//     }
-
-//     return (
-//         <Layout>
-            
-               
-//             {/* <NextLink href="/create-post">
-//             <Link ml="auto">create post</Link>
-//         </NextLink> */}
-        
-//         <br />
-//         {!data && fetching ? 
-//         (    <div>loading...</div> ) 
-//         : (
-//             <Stack spacing={8}>
-//             {
-//                 data.posts.posts.map((p) => (
-//                 !p ? null : (
-//                 <Flex key={p.id} p ={5} shadow="md" borderWidth="1px">
-                     
-//                     {/* fix icons using https://chakra-ui.com/docs/media-and-icons/icon */}
-//                     <UpdootSection post={p} />
-//                     <Box flex={1}>
-//                         <NextLink href="/post/[id]" as={`/post/${p.id}`}>
-//                         <Link>
-//                             <Heading fontSize="xl">{p.title}</Heading>
-//                         </Link>
-//                         </NextLink>
-//                         <Text>posted by {p.creator.username}</Text>
-//                         <Flex align="center">
-//                         <Text flex={1} mt={4}>{p.textSnippet}</Text>
-                    
-//                         <Box ml="auto">
-//                             <EditDeletePostButtons id={p.id} creatorId={p.creator.id}/>
-//                         </Box>
-                        
-                        
-//                         </Flex>
-//                         )
-//                     </Box>
-//                 </Flex>
-//                 )
-//             ))}
-//             </Stack>
-//         )}
-
-        
-
-//         {data && data.posts.hasMore ? (
-//             <Flex>
-//                 <Button  onClick={() => {
-//                     setVariables({
-//                         limit: variables.limit,
-//                         cursor: data.posts.posts[data.posts.posts.length -1].createdAt,
-//                     })
-//                 }}
-//                 isLoading={fetching} m="auto" my={8}>load more</Button>
-//             </Flex>
-//         ) : null }
-//         </Layout>
-//     );
-// }
-
-// export default withUrqlClient(createUrqlClient, {ssr: true})(Index);
 import {
     Box,
     Button,
@@ -133,7 +52,9 @@ import { MainPage } from '../components/MainPage';
       
       // const refresh = refresh_token_data
       console.log("GETTING NORMALIZED DATE EVENT!!!");
+      // axios.post('http://localhost:4000/api/get-daily-events', { date, refresh_token_data }, {withCredentials: true})
       axios.post('http://localhost:4000/api/get-daily-events', { date, refresh_token_data }, {withCredentials: true})
+
       .then((resp) => {
         console.log("IN GETGCALEVENTS!!!!")
         console.log(resp.data);
@@ -154,9 +75,11 @@ import { MainPage } from '../components/MainPage';
           if (valArr) {
             console.log("value arr length:");
             console.log(valArr.length);
-            valArr.forEach((overlyingevent) => {
+            valArr.forEach((overlyingevent : string[][]) => {
               const title = overlyingevent[7][1]; // summary
-              const start = (new Date(Object.values(overlyingevent[10][1])[0])).toISOString();
+              const start_as_json : string = Object.values(overlyingevent[10][1])[0];
+              const start = (new Date(start_as_json)).toISOString();
+
               const end = (new Date(Object.values(overlyingevent[11][1])[0])).toISOString();
               console.log("SETTING BLOCK!!!")            
               createBlockWithTimesMutation({
@@ -210,7 +133,7 @@ import { MainPage } from '../components/MainPage';
         .catch((err) => console.log(err.message));
     };
   
-    const getGCalDateEvent = (date, eventList): (Array<Object> | undefined) => {
+    const getGCalDateEvent = (date): (Array<Object> | undefined) => {
   
       axios.post('http://localhost:4000/api/get-daily-events', { date })
       .then((resp) => {
@@ -245,7 +168,7 @@ import { MainPage } from '../components/MainPage';
         // return undefined;
       })
       .catch((err) => console.log(err.message));
-      // return undefined;
+      return undefined;
     };
   
     const getDayEvents = (e) => {

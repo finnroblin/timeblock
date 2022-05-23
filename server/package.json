@@ -1,5 +1,5 @@
 {
-  "name": "redditclone",
+  "name": "timeblock",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -45,7 +45,7 @@
     "ioredis": "^4.28.2",
     "nodemailer": "^6.7.2",
     "pg": "^8.7.1",
-    "redis": "3.0.2",
+    "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.41",
