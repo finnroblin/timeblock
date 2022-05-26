@@ -2,11 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/change-password/[token]": "pages/change-password/[token].html",
-  "/forgot-password": "pages/forgot-password.html",
-  "/gsetup": "pages/gsetup.html",
-  "/": "pages/index.html",
-  "/login": "pages/login.html",
-  "/register": "pages/register.html",
-  "/404": "pages/404.html"
+  "/": "pages/index.js"
 }

@@ -1,6 +1,8 @@
 dist
 node_modules
 .env
+# backend deployment zips
+backend-deploy-zips
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

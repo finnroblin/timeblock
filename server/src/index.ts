@@ -93,6 +93,8 @@ const main = async () => {
           // origin: "*",
           // origin: process.env.CORS_ORIGIN,
           origin: "http://localhost:3000",
+          // origin: "https://deploy.d2g4161y0oofu2.amplifyapp.com",
+          
           // origin: "http://localhost:4000/graphql",
           // origin: 'https://studio.apollographql.com',
           credentials: true,
@@ -168,7 +170,7 @@ const main = async () => {
         " postgres env: ",
         process.env.DB_HOST
       );
-      console.log("11:12 build")
+      console.log("11:12 build,v2")
 
       
     }

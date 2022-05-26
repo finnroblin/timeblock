@@ -86,7 +86,8 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
   }
   return {
     // url: "http://localhost:4000/graphql",
-    url: "https://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/graphql",
+    // url: "https://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/graphql",
+    url: "https://zblock2-env.eba-dtmnwmak.us-west-1.elasticbeanstalk.com/graphql",
     fetchOptions: {
       credentials: "include" as const,
       headers: cookie

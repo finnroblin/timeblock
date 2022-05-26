@@ -96,7 +96,7 @@ const main = async () => {
     app.use("/api", require("./routes/api.route"));
     app.listen(8080, () => {
         console.log("server started on port 8080, redis env: ", process.env.REDIS_HOST, " postgres env: ", process.env.DB_HOST);
-        console.log("11:12 build");
+        console.log("11:12 build,v2");
     });
 };
 main().catch((err) => {
