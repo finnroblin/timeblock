@@ -14,10 +14,10 @@ interface MainPageProps {
 export const MainPage: React.FC<MainPageProps> = ({ date }) => {
     const [toUpdateAssignedBlocks, setToUpdateAssignedBlocks] = useState(false);
     console.log("checking api");
-    axios.post('https://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/api/')
+    axios.get('https://zblock2-env.eba-dtmnwmak.us-west-1.elasticbeanstalk.com/api')
       .then((resp) => {
         console.log("In the main page, posting to api")
-        console.log("api resp: ", resp)
+        // console.log("api resp: ", resp)
       })
   return (
     <>
