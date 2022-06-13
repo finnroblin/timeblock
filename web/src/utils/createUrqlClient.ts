@@ -80,7 +80,7 @@ function invalidateAllPosts(cache: Cache) {
 }
 
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
-  console.log("CREATING URQL CLIENT WITH URL: ", process.env.BACKEND_URL);
+  console.log("CREATING URQL CLIENT WITH URL: ", process.env.REACT_APP_BACKEND_URL);
   let cookie = "";
   if (isServer()) {
     cookie = ctx?.req?.headers?.cookie;
@@ -89,7 +89,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
     // url: "http://localhost:4000/graphql",
     // url: "http://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/graphql",
     // url: "https://zblock2-env.eba-dtmnwmak.us-west-1.elasticbeanstalk.com/graphql",
-    url: process.env.BACKEND_URL,
+    url: process.env.REACT_APP_BACKEND_URL,
     // url: "http://zenblock-env.eba-j3vpqyta.us-west-1.elasticbeanstalk.com/graphql",
     fetchOptions: {
       credentials: "include" as const,
