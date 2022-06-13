@@ -89,7 +89,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
     // url: "http://localhost:4000/graphql",
     // url: "http://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/graphql",
     // url: "https://zblock2-env.eba-dtmnwmak.us-west-1.elasticbeanstalk.com/graphql",
-    url: process.env.REACT_APP_BACKEND_URL,
+    url: process.env.NEXT_PUBLIC_BACKEND_URL,
     // url: "http://zenblock-env.eba-j3vpqyta.us-west-1.elasticbeanstalk.com/graphql",
     fetchOptions: {
       credentials: "include" as const,
