@@ -357,7 +357,7 @@ const Index = () => {
           //   }
 
           <Layout variant="regular">
-            <Text> {process.env.NEXT_PUBLIC_BACKEND_URL}</Text>
+            <Text> GraphQL URI: {process.env.NEXT_PUBLIC_BACKEND_URL}</Text>
             <MainPage date={d} />
           </Layout>
         )
