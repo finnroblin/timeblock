@@ -85,6 +85,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
   if (isServer()) {
     cookie = ctx?.req?.headers?.cookie;
   }
+  console.log("Cookie: ", cookie)
   return {
     // url: "http://localhost:4000/graphql",
     // url: "http://timeblocktest-env.eba-zmz7uhir.us-west-1.elasticbeanstalk.com/graphql",
